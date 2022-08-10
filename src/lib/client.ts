@@ -1,11 +1,18 @@
 import base64url from "base64url";
 import { contractAddress } from "ton";
-import { CompileOptions, ReturnedSource, VerifyResult } from '../server-types/server-types';
+import {
+  CompileOptions,
+  ReturnedSource,
+  VerifyResult,
+} from "../server-types/server-types";
 import { UploadedFile } from "../store/store";
 
 function jsonToBlob(json: Record<string, any>): Blob {
   return new Blob([JSON.stringify(json)], { type: "application/json" });
 }
+
+// const server = "http://localhost:3003"
+const server = "https://ton-source-staging.herokuapp.com";
 
 class Client {
   // TODO payload type
@@ -38,7 +45,7 @@ class Client {
       })
     );
 
-    const response = await fetch(`http://localhost:3003/source`, {
+    const response = await fetch(`${server}/source`, {
       method: "POST",
       body: formData,
     });
@@ -49,9 +56,7 @@ class Client {
   }
 
   async get(hash: string): Promise<ReturnedSource | undefined> {
-    const res = await fetch(
-      `http://localhost:3003/source/${base64url.fromBase64(hash)}`
-    );
+    const res = await fetch(`${server}/source/${base64url.fromBase64(hash)}`);
     if (res.status === 404) return undefined;
     return res.json();
   }
