@@ -3,13 +3,14 @@ import { useCallback, useRef } from "react";
 import { useFileState } from "../../store/useFileState";
 import { useDropzone } from "react-dropzone";
 
+export const onDrop = (acceptedFiles: any) => {
+  console.log(acceptedFiles, "1");
+};
+
 export function AddFilesButton() {
   const { addFiles } = useFileState();
   const inputRef = useRef(null);
 
-  const onDrop = useCallback((acceptedFiles: any) => {
-    console.log(acceptedFiles);
-  }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const onUploadFiles = async (e: any) => {
@@ -19,8 +20,7 @@ export function AddFilesButton() {
   };
 
   return (
-    <div {...getRootProps()}>
-      {isDragActive}
+    <div>
       <div>
         <Button
           onClick={() => {
