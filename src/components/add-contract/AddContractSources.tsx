@@ -6,40 +6,59 @@ import { BaseCard } from "../shared/BaseCard";
 import { SubmitContractButton } from "./SubmitContractButton";
 import { FileUploadWarnings } from "./FileUploadWarnings";
 import { AddFilesButton } from "./AddFilesButton";
+import { useDropzone } from "react-dropzone";
 
 export function AddContractSources() {
-  const { fileState } = useFileState();
+  const { fileState, addFiles } = useFileState();
+
+  const onDrop = (acceptedFiles: any) => {
+    addFiles(acceptedFiles);
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    noClick: true,
+  });
 
   return (
-    <BaseCard>
-      <Grid.Container css={{ mb: 8 }}>
-        <Grid>
-          <Text css={{ mb: 12 }} h4>
-            Add sources
+    <BaseCard
+      css={{
+        border: isDragActive ? "3px dashed $accents2" : "",
+      }}
+    >
+      <div
+        {...getRootProps()}
+        style={{ display: "flex", flexDirection: "column" }}
+      >
+        <Grid.Container css={{ mb: 8 }}>
+          <Grid>
+            <Text css={{ mb: 12 }} h4>
+              Add sources
+            </Text>
+          </Grid>
+          <Grid css={{ ml: "auto" }}>
+            <AddFilesButton />
+          </Grid>
+        </Grid.Container>
+        {!fileState.hasFiles && (
+          <Text
+            css={{
+              ta: "center",
+              py: 30,
+              my: 30,
+              bgColor: "#00000007",
+              color: "$accents6",
+              br: 12,
+            }}
+          >
+            Drop ".fc" files here
           </Text>
-        </Grid>
-        <Grid css={{ ml: "auto" }}>
-          <AddFilesButton />
-        </Grid>
-      </Grid.Container>
-      {!fileState.hasFiles && (
-        <Text
-          css={{
-            ta: "center",
-            py: 30,
-            my: 30,
-            bgColor: "#00000007",
-            color: "$accents6",
-            br: 12,
-          }}
-        >
-          Start by adding source files
-        </Text>
-      )}
-      {fileState.hasFiles && <UploadFilesTable />}
-      {fileState.hasFiles && <FileUploadWarnings />}
-      <CompilerDetails />
-      <SubmitContractButton />
+        )}
+        {fileState.hasFiles && <UploadFilesTable />}
+        {fileState.hasFiles && <FileUploadWarnings />}
+        <CompilerDetails />
+        <SubmitContractButton />
+      </div>
     </BaseCard>
   );
 }

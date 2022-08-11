@@ -22,7 +22,7 @@ export function useFileState() {
             (newFile) =>
               !fileState.uploadedFiles.some(
                 (existingFile) => existingFile.file.name === newFile.name
-              )
+              ) && newFile.name.match(/.*\.fc/)
           )
           .map(async (f): Promise<UploadedFile> => {
             const content = await f.text();
