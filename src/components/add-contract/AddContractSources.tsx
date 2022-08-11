@@ -26,7 +26,10 @@ export function AddContractSources() {
         border: isDragActive ? "3px dashed $accents2" : "",
       }}
     >
-      <div {...getRootProps()}>
+      <div
+        {...getRootProps()}
+        style={{ display: "flex", flexDirection: "column" }}
+      >
         <Grid.Container css={{ mb: 8 }}>
           <Grid>
             <Text css={{ mb: 12 }} h4>
