@@ -131,7 +131,7 @@ function App() {
       <Col css={{ pb: 24 }}>
         <TopBar />
         {contractAddress && <ContractDetails />}
-        {contractState.source.data === undefined && <Loading type="points-opacity" css={{ mx: "auto", display: 'block', my: 30 }} size="xl" />}
+        {contractState.source.data === undefined && contractState.hash.data && <Loading type="points-opacity" css={{ mx: "auto", display: 'block', my: 30 }} size="xl" />}
         {contractAddress && contractState.source.data === null && (
           <AddContract />
         )}

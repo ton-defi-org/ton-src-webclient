@@ -53,7 +53,6 @@ export function SubmitContractButton() {
           !filesState.hasFiles ||
           !contractState.hash.data ||
           !contractAddress ||
-          filesState.warnings.length > 0 ||
           compileState.result === "similar" // This implies source has been uploaded already
         }
         onClick={async () => {
