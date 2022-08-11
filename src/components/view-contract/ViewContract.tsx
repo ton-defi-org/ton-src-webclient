@@ -5,15 +5,16 @@ import { useEffect, useState } from "react";
 import { DataPiece } from "../shared/DataPiece";
 import { BaseCard } from "../shared/BaseCard";
 import { contractStateRecoil } from "../../store/store";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 export function ViewContractDetails() {
   const contractState = useRecoilValue(contractStateRecoil);
 
   return (
     <BaseCard>
-      <Text h4>Compiler details</Text>
-      <br />
+      <Text css={{ mb: 12 }} h4>
+        Compiler details
+      </Text>
       {/* <FetchableDataPiece label="Hash" data={contractState.hash} /> */}
       <DataPiece label="Compiler" data={contractState.source.data?.compiler} />
       <DataPiece label="Version" data={contractState.source.data?.version} />
@@ -46,31 +47,11 @@ export function ViewContractCode() {
 
 function ViewContractVerification() {
   const c = useRecoilValue(contractStateRecoil);
-  const {contractAddress} = useParams();
+  const { contractAddress } = useParams();
 
   return (
     <BaseCard>
-      <Text css={{ mb: 8 }} h4>
-        Verify manually
-      </Text>
-      {/* <Grid.Container direction="column" gap={1}>
-        <Grid>
-          <Button css={{ ta: "left" }} flat>
-            Ensure code hash is the same as displayed in this page (tonscan
-            etc.)
-          </Button>
-        </Grid>
-        <Grid>
-          <Button css={{ ta: "left" }} flat>
-            Download sources (.zip)
-          </Button>
-        </Grid>
-        <Grid>
-          <Button css={{ ta: "left" }} flat>
-            Compile and run ./fift-to-hash.sh
-          </Button>
-        </Grid>
-      </Grid.Container> */}
+      <Text h4>Verify manually</Text>
       <pre style={{ border: "1px solid #00000022", whiteSpace: "pre-line" }}>
         {"# Get code hash from tonwhales API. Note: jq must be installed\n"}
         {`CODE_CELL=$(curl -X 'GET' \

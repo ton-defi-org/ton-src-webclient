@@ -1,12 +1,10 @@
-import {
-  Row,
-  Col,
-  Text, Loading
-} from "@nextui-org/react";
-
+import { Row, Col, Text, Loading } from "@nextui-org/react";
 
 export function DataPiece({
-  label, data, loading, error,
+  label,
+  data,
+  loading,
+  error,
 }: {
   label: string;
   data?: string;
@@ -21,7 +19,10 @@ export function DataPiece({
       <Col>
         {data && !loading && <Text>{data}</Text>}
         {loading && (
-          <Loading type="points-opacity" />
+          <Row css={{alignItems: 'baseline'}}>
+            <Text css={{ opacity: 0 }}>-</Text>
+            <Loading type="points-opacity" />
+          </Row>
         )}
         {error && <Text color="error">{error}</Text>}
       </Col>

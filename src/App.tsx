@@ -1,4 +1,13 @@
-import { NextUIProvider, Card, Row, Col, Text, Input } from "@nextui-org/react";
+import {
+  NextUIProvider,
+  Card,
+  Row,
+  Col,
+  Text,
+  Input,
+  Progress,
+  Loading,
+} from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useResetRecoilState, useRecoilValue } from "recoil";
@@ -122,6 +131,7 @@ function App() {
       <Col css={{ pb: 24 }}>
         <TopBar />
         {contractAddress && <ContractDetails />}
+        {contractState.source.data === undefined && <Loading type="points-opacity" css={{ mx: "auto", display: 'block', my: 30 }} size="xl" />}
         {contractAddress && contractState.source.data === null && (
           <AddContract />
         )}

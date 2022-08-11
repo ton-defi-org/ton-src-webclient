@@ -1,6 +1,6 @@
 import { Text, Grid } from "@nextui-org/react";
 import { useFileState } from "../../store/useFileState";
-import { CompilerDetails } from "../view-contract/CompilerDetails";
+import { CompilerDetails } from "./CompilerDetails";
 import { UploadFilesTable } from "./UploadFilesTable";
 import { BaseCard } from "../shared/BaseCard";
 import { SubmitContractButton } from "./SubmitContractButton";
