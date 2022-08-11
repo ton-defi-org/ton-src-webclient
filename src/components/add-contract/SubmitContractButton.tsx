@@ -36,7 +36,7 @@ export function SubmitContractButton() {
         alignItems: "right",
         d: "flex",
       }}
-      as="div"
+      as="span"
     >
       {captchaState !== CaptchState.NOT_STARTED && (
         <ReCAPTCHA
