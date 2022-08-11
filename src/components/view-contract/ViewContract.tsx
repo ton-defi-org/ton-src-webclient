@@ -6,6 +6,10 @@ import { DataPiece } from "../shared/DataPiece";
 import { BaseCard } from "../shared/BaseCard";
 import { contractStateRecoil } from "../../store/store";
 import { useParams } from "react-router-dom";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+
+TimeAgo.addDefaultLocale(en);
 
 export function ViewContractDetails() {
   const contractState = useRecoilValue(contractStateRecoil);
@@ -28,9 +32,9 @@ export function ViewContractDetails() {
       />
       <DataPiece
         label="Verified since"
-        data={new Date(
-          contractState.source?.data?.verificationDate ?? 0
-        ).toDateString()}
+        data={new TimeAgo("en-US").format(
+          new Date(contractState.source?.data?.verificationDate ?? 0)
+        )}
       />
     </BaseCard>
   );
