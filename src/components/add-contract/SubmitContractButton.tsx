@@ -9,6 +9,14 @@ import {
 import { compilerDetailsRecoil } from "../../store/store";
 import { client } from "../../lib/client";
 import { Col } from "@nextui-org/react";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useState } from "react";
+
+enum CaptchState {
+  NOT_STARTED,
+  PENDING,
+  DONE,
+}
 
 export function SubmitContractButton() {
   const filesState = useRecoilValue(fileRecoil);
@@ -17,17 +25,31 @@ export function SubmitContractButton() {
   const compilerDetails = useRecoilValue(compilerDetailsRecoil);
   let { contractAddress } = useParams();
 
+  const [captchaState, setCaptchaState] = useState(CaptchState.NOT_STARTED);
+
   return (
     <Col
       css={{
         mt: 24,
         ml: "auto",
         width: "auto",
+        alignItems: "right",
+        d: "flex",
       }}
       as="span"
     >
+      {captchaState !== CaptchState.NOT_STARTED && (
+        <ReCAPTCHA
+          sitekey="6LdVmmghAAAAAJzuecwbSQ9T5oe3PS1bGdxY0FYU"
+          onChange={() => setCaptchaState(CaptchState.DONE)}
+          onExpired={() => setCaptchaState(CaptchState.PENDING)}
+          size={"normal"}
+        />
+      )}
       <Button
+        css={{ ml: 16 }}
         disabled={
+          captchaState === CaptchState.PENDING ||
           !filesState.hasFiles ||
           !contractState.hash.data ||
           !contractAddress ||
@@ -35,6 +57,13 @@ export function SubmitContractButton() {
           compileState.result === "similar" // This implies source has been uploaded already
         }
         onClick={async () => {
+          if (captchaState === CaptchState.NOT_STARTED) {
+            setCaptchaState(CaptchState.PENDING);
+            return;
+          }
+
+          if (captchaState !== CaptchState.DONE) return;
+
           try {
             setCompileState((s) => ({ isLoading: true }));
             const res = await client.tryCompile(
