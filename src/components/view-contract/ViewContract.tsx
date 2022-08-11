@@ -72,14 +72,14 @@ function ViewContractVerification() {
         </Grid>
       </Grid.Container> */}
       <pre style={{ border: "1px solid #00000022", whiteSpace: "pre-line" }}>
-        {"# Get code hash from tonwhales API\n"}
-        {`curl -X 'GET' \
+        {"# Get code hash from tonwhales API. Note: jq must be installed\n"}
+        {`CODE_CELL=$(curl -X 'GET' \
   'https://toncenter.com/api/v2/getAddressInformation?address=${contractAddress}' \
-  -H 'accept: application/json'\n`}
+  -H 'accept: application/json' | jq -r '.result.code')\n`}
 
         {"\n# Download all files\n"}
         {c.source.data?.sources.map(
-          (x) => `curl ${x.url} > ${x.originalFilename}\n`
+          (x) => `curl ${x.url} -o ${x.originalFilename}\n`
         )}
 
         {"\n# Compile\n...\n"}
