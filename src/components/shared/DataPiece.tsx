@@ -17,10 +17,10 @@ export function DataPiece({
         <Text h5>{label}</Text>
       </Col>
       <Col>
-        {data && !loading && <Text>{data}</Text>}
+        {data && !loading && <code>{data}</code>}
         {loading && (
-          <Row css={{alignItems: 'baseline'}}>
-            <Text css={{ opacity: 0 }}>-</Text>
+          <Row css={{ alignItems: "baseline" }}>
+            <code style={{ opacity: 0 }}>-</code>
             <Loading type="points-opacity" />
           </Row>
         )}
