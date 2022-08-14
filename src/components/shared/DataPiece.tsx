@@ -5,11 +5,13 @@ export function DataPiece({
   data,
   loading,
   error,
+  format,
 }: {
   label: string;
   data?: string;
   loading?: boolean;
   error?: string;
+  format?: (data: string) => string;
 }) {
   return (
     <Row>
@@ -17,7 +19,7 @@ export function DataPiece({
         <Text h5>{label}</Text>
       </Col>
       <Col>
-        {data && !loading && <code>{data}</code>}
+        {data && !loading && <code>{format ? format(data) : data}</code>}
         {loading && (
           <Row css={{ alignItems: "baseline" }}>
             <code style={{ opacity: 0 }}>-</code>
