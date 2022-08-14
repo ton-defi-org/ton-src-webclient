@@ -121,11 +121,6 @@ function ContractDetails() {
       <DataPiece
         label="Workchain"
         data={`${contractState.workchain ?? ""}`}
-        format={(d) => {
-          if (d === "-1") return "Masterchain";
-          if (d === "0") return "Basic workchain";
-          return d;
-        }}
       />
       <FetchableDataPiece label="Hash" data={contractState.hash} />
       <FetchableDataPiece

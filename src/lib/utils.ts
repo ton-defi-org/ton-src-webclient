@@ -4,6 +4,22 @@ const client = new TonClient({
   endpoint: "https://scalable-api.tonwhales.com/jsonRPC",
 });
 
+export function workchainForAddress(address: string): string {
+  try {
+    const _address = Address.parse(address);
+    switch (_address.workChain) {
+      case -1:
+        return "Masterchain";
+      case 0:
+        return "Basic Workchain";
+      default:
+        return `${_address.workChain}`;
+    }
+  } catch (e) {
+    return "";
+  }
+}
+
 export async function getContractChainInfo(address: string) {
   const _address = Address.parse(address);
   let data = await client.getContractState(_address);
@@ -13,7 +29,6 @@ export async function getContractChainInfo(address: string) {
   return {
     onChainCodeHash: codeCell[0].hash().toString("base64"),
     balance: fromNano(b),
-    workchain: _address.workChain,
   };
 }
 

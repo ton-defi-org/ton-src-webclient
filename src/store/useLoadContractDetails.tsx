@@ -2,7 +2,11 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { client } from "../lib/client";
-import { getContractChainInfo, sortByProps } from "../lib/utils";
+import {
+  getContractChainInfo,
+  sortByProps,
+  workchainForAddress,
+} from "../lib/utils";
 import { contractStateRecoil } from "./store";
 
 export function useLoadContractDetails() {
@@ -11,15 +15,20 @@ export function useLoadContractDetails() {
   useEffect(() => {
     if (!contractAddress) return;
 
+    setContractState((s) => ({
+      ...s,
+      workchain: workchainForAddress(contractAddress),
+    }));
+
     (async () => {
       try {
-        const { onChainCodeHash, balance, workchain } =
-          await getContractChainInfo(contractAddress);
+        const { onChainCodeHash, balance } = await getContractChainInfo(
+          contractAddress
+        );
         setContractState((s) => ({
           ...s,
           hash: { data: onChainCodeHash },
           balance: { data: balance },
-          workchain,
         }));
       } catch (e) {
         setContractState((s: any) => ({ ...s, hash: { error: String(e) } }));
