@@ -20,16 +20,18 @@ export function workchainForAddress(address: string): string {
   }
 }
 
-export async function getContractChainInfo(address: string) {
+export async function getContractBalance(address: string) {
+  const _address = Address.parse(address);
+  const b = await client.getBalance(_address);
+
+  return fromNano(b);
+}
+export async function getContractCodeHash(address: string) {
   const _address = Address.parse(address);
   let data = await client.getContractState(_address);
-  const b = await client.getBalance(_address);
   let codeCell = Cell.fromBoc(data.code!);
 
-  return {
-    onChainCodeHash: codeCell[0].hash().toString("base64"),
-    balance: fromNano(b),
-  };
+  return codeCell[0].hash().toString("base64");
 }
 
 export function sortByProps(

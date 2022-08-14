@@ -142,6 +142,7 @@ export function UploadFilesTable() {
             <Table.Row>
               {(columnKey) => {
                 return (
+                  // @ts-ignore
                   <Table.Cell
                     css={{
                       width: columnKey === "actions" ? 120 : "inherit",
