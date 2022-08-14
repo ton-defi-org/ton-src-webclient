@@ -75,7 +75,7 @@ function ContractAddressInput() {
       }}
       onKeyDown={(e: any) => {
         if (e.keyCode === 13) {
-          navigate(`/${val}`);
+          navigate(val);
           setVal("");
         }
       }}
