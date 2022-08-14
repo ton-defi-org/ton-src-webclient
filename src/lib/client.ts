@@ -11,8 +11,8 @@ function jsonToBlob(json: Record<string, any>): Blob {
   return new Blob([JSON.stringify(json)], { type: "application/json" });
 }
 
-// const server = "http://localhost:3003"
-const server = "https://ton-source-staging.herokuapp.com";
+const server = "http://localhost:3003"
+// const server = "https://ton-source-staging.herokuapp.com";
 
 class Client {
   // TODO payload type
