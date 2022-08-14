@@ -8,9 +8,11 @@ export interface FetchablePiece<T> {
 export function FetchableDataPiece({
   label,
   data,
+  format,
 }: {
   label: string;
   data: FetchablePiece<string>;
+  format?: (data: string) => string;
 }) {
   return (
     <DataPiece
@@ -18,6 +20,7 @@ export function FetchableDataPiece({
       data={data.data}
       error={data.error}
       loading={!data.data && !data.error}
+      format={format}
     />
   );
 }

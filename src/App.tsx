@@ -118,7 +118,21 @@ function ContractDetails() {
         Contract data
       </Text>
       <DataPiece label="Address" data={contractAddress!} />
+      <DataPiece
+        label="Workchain"
+        data={`${contractState.workchain ?? ""}`}
+        format={(d) => {
+          if (d === "-1") return "Masterchain";
+          if (d === "0") return "Basic workchain";
+          return d;
+        }}
+      />
       <FetchableDataPiece label="Hash" data={contractState.hash} />
+      <FetchableDataPiece
+        label="Balance"
+        data={contractState.balance}
+        format={(d) => `${d} TON`}
+      />
     </BaseCard>
   );
 }
@@ -131,7 +145,13 @@ function App() {
       <Col css={{ pb: 24 }}>
         <TopBar />
         {contractAddress && <ContractDetails />}
-        {contractState.source.data === undefined && contractState.hash.data && <Loading type="points-opacity" css={{ mx: "auto", display: 'block', my: 30 }} size="xl" />}
+        {contractState.source.data === undefined && contractState.hash.data && (
+          <Loading
+            type="points-opacity"
+            css={{ mx: "auto", display: "block", my: 30 }}
+            size="xl"
+          />
+        )}
         {contractAddress && contractState.source.data === null && (
           <AddContract />
         )}

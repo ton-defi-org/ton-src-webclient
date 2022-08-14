@@ -101,7 +101,9 @@ export function generateRecoil<T, C>(
 export const contractStateRecoil = generateRecoil<
   {
     hash: FetchablePiece<string>;
+    balance: FetchablePiece<string>;
     source: FetchablePiece<ReturnedSource | null>;
+    workchain?: number
   },
   {}
->({ hash: {}, source: {} }, (s) => ({}));
+>({ hash: {}, source: {}, balance: {} }, (s) => ({}));

@@ -13,7 +13,7 @@ root.render(
   <RecoilRoot>
     <BrowserRouter>
       <Routes>
-        <Route path=":contractAddress" element={<App />} />
+        <Route path="/:contractAddress" element={<App />} />
         <Route path="/" element={<App />} />
       </Routes>
     </BrowserRouter>

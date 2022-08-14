@@ -1,15 +1,19 @@
-import { Address, TonClient, Cell } from "ton";
+import { Address, TonClient, Cell, fromNano } from "ton";
 
 const client = new TonClient({
   endpoint: "https://scalable-api.tonwhales.com/jsonRPC",
 });
 
-export async function getHashByContractAddress(address: string) {
-  let data = await client.getContractState(Address.parse(address));
+export async function getContractChainInfo(address: string) {
+  const _address = Address.parse(address);
+  let data = await client.getContractState(_address);
+  const b = await client.getBalance(_address);
   let codeCell = Cell.fromBoc(data.code!);
 
   return {
     onChainCodeHash: codeCell[0].hash().toString("base64"),
+    balance: fromNano(b),
+    workchain: _address.workChain,
   };
 }
 
