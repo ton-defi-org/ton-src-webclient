@@ -53,6 +53,16 @@ export function ViewContractDetails() {
   );
 }
 
+export function Disassembled() {
+  const { decompiled } = useRecoilValue(contractStateRecoil);
+  return (
+    <BaseCard>
+      <Text h4>Source code (disassembled)</Text>
+      <pre>{decompiled.data}</pre>
+    </BaseCard>
+  );
+}
+
 export function ViewContractCode() {
   return (
     <BaseCard>
@@ -174,6 +184,7 @@ export function ViewContract() {
   return (
     <Grid.Container direction="column">
       <ViewContractDetails />
+      <Disassembled />
       <ViewContractCode />
       <ViewContractVerification />
     </Grid.Container>
