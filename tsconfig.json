@@ -18,9 +18,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "typeRoots": ["./custom-types", "node_modules/@types"]
   },
   "include": [
-    "src"
+    "src",
+    "./custom-types/ViewContract.d.ts"
   ]
 }

@@ -30,6 +30,10 @@ export function AddFilesButton() {
       <input
         {...getInputProps()}
         onChange={onUploadFiles}
+        onClick={(e) => {
+          // @ts-ignore
+          e.target.value = "";
+        }}
         style={{ display: "none" }}
         id="fileUpload"
         type="file"

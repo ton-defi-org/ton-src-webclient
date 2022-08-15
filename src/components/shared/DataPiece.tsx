@@ -1,4 +1,6 @@
 import { Row, Col, Text, Loading } from "@nextui-org/react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export function DataPiece({
   label,
@@ -20,12 +22,7 @@ export function DataPiece({
       </Col>
       <Col>
         {data && !loading && <code>{format ? format(data) : data}</code>}
-        {loading && (
-          <Row css={{ alignItems: "baseline" }}>
-            <code style={{ opacity: 0 }}>-</code>
-            <Loading type="points-opacity" />
-          </Row>
-        )}
+        {loading && <Skeleton width={"35%"} />}
         {error && <Text color="error">{error}</Text>}
       </Col>
     </Row>
