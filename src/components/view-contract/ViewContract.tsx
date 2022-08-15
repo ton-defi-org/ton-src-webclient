@@ -98,12 +98,7 @@ function ViewContractVerification() {
                   s.url,
                   s.originalFilename,
                 ]),
-                // TODO get this from server
-                compilationCommandLine: `func -o temp.fift -SPA ${c.source
-                  .data!.sources.filter((s) => s.includeInCompile)
-                  .reverse()
-                  .map((s) => s.originalFilename)
-                  .join(" ")}`,
+                compilationCommandLine: c.source.data!.compileCommandLine,
               },
               null,
               4

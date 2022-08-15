@@ -32,7 +32,7 @@ const TEMP_DIR = "temp";
 
     // Compile & retrieve hash (TODO support other func versions)
     await execAsync(config.compilationCommandLine, { cwd: TEMP_DIR });
-    const fiftFile = path.join(TEMP_DIR, "temp.fift");
+    const fiftFile = path.join(TEMP_DIR, "output.fif");
     const b64OutFile = `${fiftFile}-b64.cell`;
     const fiftCellSource = `"${fiftFile}" include \n
 boc>B "${b64OutFile}" B>file`;
