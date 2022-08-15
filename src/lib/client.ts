@@ -11,7 +11,7 @@ function jsonToBlob(json: Record<string, any>): Blob {
   return new Blob([JSON.stringify(json)], { type: "application/json" });
 }
 
-const server = "http://localhost:3003"
+const server = "http://localhost:3003";
 // const server = "https://ton-source-staging.herokuapp.com";
 
 class Client {
@@ -49,6 +49,10 @@ class Client {
       method: "POST",
       body: formData,
     });
+
+    if (response.status !== 200) {
+      throw new Error(await response.text());
+    }
 
     const json = await response.json();
 

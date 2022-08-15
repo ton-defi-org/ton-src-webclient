@@ -62,6 +62,22 @@ export function ViewContractCode() {
   );
 }
 
+function download(filename: string, text: string) {
+  var element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+  );
+  element.setAttribute("download", filename);
+
+  element.style.display = "none";
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
 function ViewContractVerification() {
   const c = useRecoilValue(contractStateRecoil);
   const { contractAddress } = useParams();
@@ -137,7 +153,15 @@ function ViewContractVerification() {
       >
         <Grid.Container direction="column" css={{ rowGap: 16 }}>
           <Grid>
-            1. <Link>Download</Link> <code>verify.js</code>
+            1.{" "}
+            <Link
+              onClick={() => {
+                download("verify.js", template);
+              }}
+            >
+              Download
+            </Link>{" "}
+            <code>verify.js</code> and place it in a new folder
           </Grid>
           <Grid>
             2. Run&nbsp;<code>npm install axios ton</code>
