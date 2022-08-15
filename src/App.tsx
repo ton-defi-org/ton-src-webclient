@@ -26,6 +26,8 @@ import {
 import { useLoadContractDetails } from "./store/useLoadContractDetails";
 
 import { createTheme } from "@nextui-org/react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const darkTheme = createTheme({
   type: "dark",
@@ -118,15 +120,7 @@ function ContractDetails() {
         Contract data
       </Text>
       <DataPiece label="Address" data={contractAddress!} />
-      <DataPiece
-        label="Workchain"
-        data={`${contractState.workchain ?? ""}`}
-        format={(d) => {
-          if (d === "-1") return "Masterchain";
-          if (d === "0") return "Basic workchain";
-          return d;
-        }}
-      />
+      <DataPiece label="Workchain" data={`${contractState.workchain ?? ""}`} />
       <FetchableDataPiece label="Hash" data={contractState.hash} />
       <FetchableDataPiece
         label="Balance"
@@ -145,12 +139,10 @@ function App() {
       <Col css={{ pb: 24 }}>
         <TopBar />
         {contractAddress && <ContractDetails />}
-        {contractState.source.data === undefined && contractState.hash.data && (
-          <Loading
-            type="points-opacity"
-            css={{ mx: "auto", display: "block", my: 30 }}
-            size="xl"
-          />
+        {contractState.source.data === undefined  && (
+          <BaseCard>
+            <Skeleton count={4}/>
+          </BaseCard>
         )}
         {contractAddress && contractState.source.data === null && (
           <AddContract />

@@ -25,7 +25,11 @@ export function SubmitContractButton() {
   const compilerDetails = useRecoilValue(compilerDetailsRecoil);
   let { contractAddress } = useParams();
 
-  const [captchaState, setCaptchaState] = useState(CaptchState.NOT_STARTED);
+  const [captchaState, setCaptchaState] = useState(
+    process.env.NODE_ENV === "production"
+      ? CaptchState.NOT_STARTED
+      : CaptchState.DONE
+  );
 
   return (
     <Col
@@ -38,14 +42,15 @@ export function SubmitContractButton() {
       }}
       as="span"
     >
-      {captchaState !== CaptchState.NOT_STARTED && (
-        <ReCAPTCHA
-          sitekey="6LdVmmghAAAAAJzuecwbSQ9T5oe3PS1bGdxY0FYU"
-          onChange={() => setCaptchaState(CaptchState.DONE)}
-          onExpired={() => setCaptchaState(CaptchState.PENDING)}
-          size={"normal"}
-        />
-      )}
+      {process.env.NODE_ENV === "production" &&
+        captchaState !== CaptchState.NOT_STARTED && (
+          <ReCAPTCHA
+            sitekey="6LdVmmghAAAAAJzuecwbSQ9T5oe3PS1bGdxY0FYU"
+            onChange={() => setCaptchaState(CaptchState.DONE)}
+            onExpired={() => setCaptchaState(CaptchState.PENDING)}
+            size={"normal"}
+          />
+        )}
       <Button
         css={{ ml: 16 }}
         disabled={
