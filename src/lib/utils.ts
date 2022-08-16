@@ -1,4 +1,6 @@
 import { Address, TonClient, Cell, fromNano } from "ton";
+import { fromCode } from "tvm-disassembler";
+import { Cell as DisassmeblerCell } from "tvm-disassembler/node_modules/ton";
 
 const client = new TonClient({
   endpoint: "https://scalable-api.tonwhales.com/jsonRPC",
@@ -29,9 +31,12 @@ export async function getContractBalance(address: string) {
 export async function getContractCodeHash(address: string) {
   const _address = Address.parse(address);
   let data = await client.getContractState(_address);
-  let codeCell = Cell.fromBoc(data.code!);
+  let codeCell = DisassmeblerCell.fromBoc(data.code!)[0];
 
-  return codeCell[0].hash().toString("base64");
+  return {
+    hash: codeCell.hash().toString("base64"),
+    decompiled: fromCode(codeCell),
+  };
 }
 
 export function sortByProps(

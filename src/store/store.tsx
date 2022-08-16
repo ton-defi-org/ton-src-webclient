@@ -103,7 +103,8 @@ export const contractStateRecoil = generateRecoil<
     hash: FetchablePiece<string>;
     balance: FetchablePiece<string>;
     source: FetchablePiece<ReturnedSource | null>;
-    workchain?: string
+    workchain?: string;
+    decompiled: FetchablePiece<string>;
   },
   {}
->({ hash: {}, source: {}, balance: {} }, (s) => ({}));
+>({ hash: {}, source: {}, balance: {}, decompiled: {} }, (s) => ({}));
