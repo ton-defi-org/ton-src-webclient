@@ -117,7 +117,7 @@ function ContractDetails() {
   return (
     <BaseCard>
       <Text css={{ mb: 12 }} h4>
-        Contract data
+        Contract
       </Text>
       <DataPiece label="Address" data={contractAddress!} />
       <DataPiece label="Workchain" data={`${contractState.workchain ?? ""}`} />
