@@ -140,11 +140,43 @@ function ContractDetails() {
   );
 }
 
+function LargeAddressInput() {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
+      <Input
+        status="primary"
+        css={{
+          mt: 90,
+          "--nextui--inputColor": "white",
+          "--nextui--inputFontSize": "1.7rem",
+          "--nextui--inputHeightRatio": 3,
+          w: "50%",
+        }}
+        placeholder="Enter contract address"
+        bordered
+        animated={false}
+        type="search"
+        onKeyDown={(e: any) => {
+          if (e.keyCode === 13) {
+            navigate(`/${e.target.value}`);
+          }
+        }}
+      />
+    </div>
+  );
+}
+
 function App() {
   const contractState = useRecoilValue(contractStateRecoil);
   const { contractAddress } = useParams();
-  const navigate = useNavigate();
-
   return (
     <NextUIProvider>
       <Col css={{ pb: 24 }}>
@@ -159,39 +191,7 @@ function App() {
           <AddContract />
         )}
         {contractState.source.data !== undefined && <ViewContract />}
-        {!contractAddress && (
-          // TODO input
-          // <Text css={{ textAlign: "center", mt: 48 }} h2>
-          //   Enter a contract address...
-          // </Text>d
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <Input
-              status="primary"
-              css={{
-                mt: 90,
-                "--nextui--inputColor": "white",
-                "--nextui--inputFontSize": "1.7rem",
-                "--nextui--inputHeightRatio": 3,
-                w: "50%",
-              }}
-              placeholder="Enter contract address"
-              bordered
-              animated={false}
-              type="search"
-              onKeyDown={(e: any) => {
-                if (e.keyCode === 13) {
-                  navigate(`/${e.target.value}`);
-                }
-              }}
-            />
-          </div>
-        )}
+        {!contractAddress && <LargeAddressInput />}
       </Col>
     </NextUIProvider>
   );
