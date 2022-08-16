@@ -33,8 +33,6 @@ export async function getContractCodeHash(address: string) {
   let data = await client.getContractState(_address);
   let codeCell = DisassmeblerCell.fromBoc(data.code!)[0];
 
-  console.log(fromCode(codeCell))
-
   return {
     hash: codeCell.hash().toString("base64"),
     decompiled: fromCode(codeCell),
