@@ -1,12 +1,9 @@
-import { FileViewer, selectedFileRecoil } from "./FileViewer";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { FileViewer } from "./FileViewer";
+import { useRecoilValue } from "recoil";
 import {
   Button,
-  Col,
-  Container,
   Grid,
   Link,
-  Row,
   Text,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
