@@ -23,10 +23,11 @@ export function useLoadContractDetails() {
 
     (async () => {
       try {
-        const onChainCodeHash = await getContractCodeHash(contractAddress);
+        const { hash, decompiled } = await getContractCodeHash(contractAddress);
         setContractState((s) => ({
           ...s,
-          hash: { data: onChainCodeHash },
+          hash: { data: hash },
+          decompiled: { data: decompiled },
         }));
 
         const balance = await getContractBalance(contractAddress);

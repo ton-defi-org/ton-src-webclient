@@ -17,10 +17,7 @@ import { useParams } from "react-router-dom";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import _template from "../../res/verify.txt";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-xcode";
-import "ace-builds/src-noconflict/ext-language_tools";
+import { WrappedAceEditor } from "./WrappedAceEditor";
 
 TimeAgo.addDefaultLocale(en);
 
@@ -53,11 +50,49 @@ export function ViewContractDetails() {
   );
 }
 
+enum CodeTab {
+  DECOMPILED,
+  FUNC,
+}
+
 export function ViewContractCode() {
+  const contractState = useRecoilValue(contractStateRecoil);
+  const [selectedTab, setSelectedTab] = useState(
+    !!contractState.source.data ? CodeTab.FUNC : CodeTab.DECOMPILED
+  );
+
+  // const isDecompiled
   return (
     <BaseCard>
       <Text h4>Source code</Text>
-      <FileViewer />
+      <Button.Group>
+        <Button
+          bordered={selectedTab !== CodeTab.FUNC}
+          disabled={!contractState.source.data}
+          onClick={() => {
+            setSelectedTab(CodeTab.FUNC);
+          }}
+        >
+          func
+        </Button>
+        <Button
+          bordered={selectedTab !== CodeTab.DECOMPILED}
+          onClick={() => {
+            setSelectedTab(CodeTab.DECOMPILED);
+          }}
+        >
+          Decompiled
+        </Button>
+      </Button.Group>
+      {selectedTab === CodeTab.FUNC && <FileViewer />}
+      {selectedTab === CodeTab.DECOMPILED && (
+        <div style={{ marginTop: 12 }}>
+          <WrappedAceEditor
+            content={contractState.decompiled.data}
+            mode={"javascript"}
+          />
+        </div>
+      )}
     </BaseCard>
   );
 }
@@ -115,31 +150,8 @@ function ViewContractVerification() {
       </Text>
       {/* TODO merge style with second ace editor */}
 
-      <Col
-        css={{
-          border: "1.5px solid #00000024",
-          br: 8,
-          px: 12,
-          pt: 12,
-          minHeight: 600,
-        }}
-      >
-        <AceEditor
-          fontSize={14}
-          mode="javascript"
-          theme="xcode"
-          name="code__"
-          // editorProps={{ $blockScrolling: true }}
-          value={template}
-          height="600px"
-          style={{ width: "100%" }}
-          readOnly
-          showPrintMargin={false}
-          showGutter={false}
-          cursorStart={0}
-          highlightActiveLine={false}
-        />
-      </Col>
+      <WrappedAceEditor mode="javascript" content={template} />
+
       <pre
         style={{
           border: "1px solid #00000022",
@@ -150,6 +162,19 @@ function ViewContractVerification() {
           <Grid>
             1.{" "}
             <Link
+              target="_blank"
+              href="https://github.com/ton-defi-org/ton-binaries"
+            >
+              Install func and fift
+            </Link>{" "}
+            and{" "}
+            <Link href="https://nodejs.org/en/download/" target="_blank">
+              node.js
+            </Link>
+          </Grid>
+          <Grid>
+            2.{" "}
+            <Link
               onClick={() => {
                 download("verify.js", template);
               }}
@@ -159,10 +184,10 @@ function ViewContractVerification() {
             <code>verify.js</code> and place it in a new folder
           </Grid>
           <Grid>
-            2. Run&nbsp;<code>npm install axios ton</code>
+            3. Run&nbsp;<code>npm install axios ton</code>
           </Grid>
           <Grid>
-            3. Run&nbsp;<code>node verify.js</code>
+            4. Run&nbsp;<code>node verify.js</code>
           </Grid>
         </Grid.Container>
       </pre>
@@ -171,11 +196,13 @@ function ViewContractVerification() {
 }
 
 export function ViewContract() {
+  const { source } = useRecoilValue(contractStateRecoil);
+
   return (
     <Grid.Container direction="column">
-      <ViewContractDetails />
+      {source.data && <ViewContractDetails />}
       <ViewContractCode />
-      <ViewContractVerification />
+      {source.data && <ViewContractVerification />}
     </Grid.Container>
   );
 }

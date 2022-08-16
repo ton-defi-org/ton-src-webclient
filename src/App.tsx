@@ -147,7 +147,7 @@ function App() {
         {contractAddress && contractState.source.data === null && (
           <AddContract />
         )}
-        {contractState.source.data && <ViewContract />}
+        {contractState.source.data !== undefined && <ViewContract />}
         {!contractAddress && (
           // TODO input
           <Text css={{ textAlign: "center", mt: 48 }} h2>
