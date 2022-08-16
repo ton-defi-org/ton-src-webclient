@@ -27,7 +27,7 @@ export function ViewContractDetails() {
   return (
     <BaseCard>
       <Text css={{ mb: 12 }} h4>
-        Compiler details
+        Compiler
       </Text>
       {/* <FetchableDataPiece label="Hash" data={contractState.hash} /> */}
       <DataPiece label="Compiler" data={contractState.source.data?.compiler} />
@@ -64,7 +64,7 @@ export function ViewContractCode() {
   // const isDecompiled
   return (
     <BaseCard>
-      <Text h4>Source code</Text>
+      <Text h4>Code</Text>
       <Button.Group>
         <Button
           bordered={selectedTab !== CodeTab.FUNC}

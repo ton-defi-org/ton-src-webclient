@@ -17,7 +17,7 @@ export function CompilerDetails() {
     <Col>
       <Row>
         <Text css={{ mb: 12 }} h4>
-          Compiler Details
+          Compiler
         </Text>
       </Row>
       <Row>
