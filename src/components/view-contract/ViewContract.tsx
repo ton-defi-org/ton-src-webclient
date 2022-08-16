@@ -17,10 +17,6 @@ import { useParams } from "react-router-dom";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import _template from "../../res/verify.txt";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-xcode";
-import "ace-builds/src-noconflict/ext-language_tools";
 import { WrappedAceEditor } from "./WrappedAceEditor";
 
 TimeAgo.addDefaultLocale(en);
@@ -90,7 +86,7 @@ export function ViewContractCode() {
       </Button.Group>
       {selectedTab === CodeTab.FUNC && <FileViewer />}
       {selectedTab === CodeTab.DECOMPILED && (
-        <div style={{marginTop: 12}}>
+        <div style={{ marginTop: 12 }}>
           <WrappedAceEditor
             content={contractState.decompiled.data}
             mode={"javascript"}
@@ -154,31 +150,8 @@ function ViewContractVerification() {
       </Text>
       {/* TODO merge style with second ace editor */}
 
-      <Col
-        css={{
-          border: "1.5px solid #00000024",
-          br: 8,
-          px: 12,
-          pt: 12,
-          minHeight: 600,
-        }}
-      >
-        <AceEditor
-          fontSize={14}
-          mode="javascript"
-          theme="xcode"
-          name="code__"
-          // editorProps={{ $blockScrolling: true }}
-          value={template}
-          height="600px"
-          style={{ width: "100%" }}
-          readOnly
-          showPrintMargin={false}
-          showGutter={false}
-          cursorStart={0}
-          highlightActiveLine={false}
-        />
-      </Col>
+      <WrappedAceEditor mode="javascript" content={template} />
+
       <pre
         style={{
           border: "1px solid #00000022",
