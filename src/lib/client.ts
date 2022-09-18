@@ -6,7 +6,7 @@ import {
   VerifyResult,
 } from "../server-types/server-types";
 import { UploadedFile } from "../store/store";
-import { connectAndSendTxn } from "./ton-client";
+import { connectAndSendTxn, readContractDetails } from "./ton-client";
 
 function jsonToBlob(json: Record<string, any>): Blob {
   return new Blob([JSON.stringify(json)], { type: "application/json" });
@@ -66,9 +66,19 @@ class Client {
   }
 
   async get(hash: string): Promise<ReturnedSource | undefined> {
-    const res = await fetch(`${server}/source/${base64url.fromBase64(hash)}`);
-    if (res.status === 404) return undefined;
-    return res.json();
+    const ipfs = await readContractDetails(hash);
+
+    if (ipfs) {
+      const res = await fetch(`https://cloudflare-ipfs.com/ipfs/${ipfs.replace('ipfs://', '')}`);
+      if (res.status === 404) return undefined;
+      return res.json();  
+    } else {
+      return undefined;
+    }
+
+    // const res = await fetch(`${server}/source/${base64url.fromBase64(hash)}`);
+    // if (res.status === 404) return undefined;
+    // return res.json();
   }
 }
 

@@ -35,7 +35,8 @@ export type DBSource = CompileOptions & {
 
 export type ReturnedSource = CompileOptions & {
   sources: {
-    url: URL;
+    // url: URL; TODO
+    codeLocationPointer: CodeLocationPointer
     originalFilename: string;
     includeInCompile: boolean;
     isEntrypoint: boolean;

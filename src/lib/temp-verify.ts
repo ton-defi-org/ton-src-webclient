@@ -36,4 +36,21 @@ const readData = () => {
   console.log(c.beginParse().readBuffer(32).toString("base64"));
 };
 
-readData()
+const readData2 = () => {
+  const dataB = Buffer.from(
+    "te6cckEBAgEAfQABhQD+tf9oIOL/DZSD5+DWLIF9hGeJ+0rlgMh4hm2VnavVwIAWcMr6UiUWtwE5V2Os7ztjc3x/SWofAmZ6R1vMsLvY//ABAGppcGZzOi8vUW1XVThZTHNiSGJSdnl1cjkzazc2UXRiUmR0aGVRdDhISnAyWlVoa0VoWnlDdXU+Sng=",
+    "base64"
+  );
+
+  const c = Cell.fromBoc(dataB)[0].beginParse();
+
+  console.log(c.readUint(8))
+  console.log(c.readBuffer(32).toString("base64"))
+  console.log(c.readAddress()?.toFriendly())
+  const contentWrapper = c.readRef();
+  console.log(contentWrapper.readRemainingBytes().toString())
+
+  // console.log(c.beginParse().readBuffer(32).toString("base64"));
+};
+
+readData2()
