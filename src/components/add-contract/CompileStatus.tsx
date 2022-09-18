@@ -9,9 +9,9 @@ export function CompileStatus() {
 
   let matchIcon = "";
 
-  if (compileState.result === "similar") {
+  if (compileState.compileResult?.result === "similar") {
     matchIcon = "✅";
-  } else if (compileState.result) {
+  } else if (compileState.compileResult?.result) {
     matchIcon = "❌";
   }
 
@@ -27,16 +27,18 @@ export function CompileStatus() {
         </Row>
       )}
 
-      {compileState.error && (
+      {compileState.compileResult?.error && (
         <Row css={{ br: 8, bgColor: "$accents2", mb: 8, px: 16 }}>
-          <pre style={{ whiteSpace: "pre-line" }}>{compileState.error}</pre>
+          <pre style={{ whiteSpace: "pre-line" }}>
+            {compileState.compileResult?.error}
+          </pre>
         </Row>
       )}
 
-      {compileState.hash && (
-        <DataPiece label="Hash" data={compileState.hash + " " + matchIcon} />
+      {compileState.compileResult?.hash && (
+        <DataPiece label="Hash" data={compileState.compileResult?.hash + " " + matchIcon} />
       )}
-      {compileState.result === "similar" && (
+      {compileState.compileResult?.result === "similar" && (
         <Col>
           <Row align="baseline">
             <Button
@@ -51,7 +53,7 @@ export function CompileStatus() {
           </Row>
         </Col>
       )}
-      {compileState.result === "not_similar" && (
+      {compileState.compileResult?.result === "not_similar" && (
         <Text color="error">Hashes do not match</Text>
       )}
     </BaseCard>

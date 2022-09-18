@@ -1,11 +1,12 @@
 import base64url from "base64url";
-import { contractAddress } from "ton";
+import { Cell, contractAddress } from "ton";
 import {
   CompileOptions,
   ReturnedSource,
   VerifyResult,
 } from "../server-types/server-types";
 import { UploadedFile } from "../store/store";
+import { connectAndSendTxn } from "./ton-client";
 
 function jsonToBlob(json: Record<string, any>): Blob {
   return new Blob([JSON.stringify(json)], { type: "application/json" });
@@ -56,7 +57,10 @@ class Client {
       throw new Error(await response.text());
     }
 
-    const json = await response.json();
+    const json = (await response.json()) as VerifyResult;
+
+    // @ts-ignore (fix buffer)
+    await connectAndSendTxn(Cell.fromBoc(Buffer.from(json.msgCell!.data))[0]);
 
     return json;
   }

@@ -58,7 +58,7 @@ export function SubmitContractButton() {
           !filesState.hasFiles ||
           !contractState.hash.data ||
           !contractAddress ||
-          compileState.result === "similar" // This implies source has been uploaded already
+          compileState.compileResult?.result === "similar" // This implies source has been uploaded already
         }
         onClick={async () => {
           if (captchaState === CaptchState.NOT_STARTED) {

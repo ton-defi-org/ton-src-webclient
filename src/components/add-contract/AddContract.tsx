@@ -20,7 +20,7 @@ export function AddContract() {
               <AddContractSources />
             </Grid>
             <Grid>
-              {(compileState.error || compileState.result || compileState.isLoading) && <CompileStatus />}
+              {(compileState.compileResult?.error || compileState.compileResult?.result || compileState.isLoading) && <CompileStatus />}
             </Grid>
           </Grid.Container>
         </div>
