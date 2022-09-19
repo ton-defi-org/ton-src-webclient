@@ -100,6 +100,7 @@ export function UploadFilesTable() {
       case "includeInCompile":
         return (
           <Switch
+            aria-label="Include in compile"
             disabled={!fileState.hasFilesWithIncludeDirectives}
             checked={item.includeInCompile}
             onChange={() => {

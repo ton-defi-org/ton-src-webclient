@@ -59,9 +59,6 @@ class Client {
 
     const json = (await response.json()) as VerifyResult;
 
-    // @ts-ignore (fix buffer)
-    await connectAndSendTxn(Cell.fromBoc(Buffer.from(json.msgCell!.data))[0]);
-
     return json;
   }
 
@@ -69,7 +66,7 @@ class Client {
     const ipfs = await readContractDetails(hash);
 
     if (ipfs) {
-      const res = await fetch(`https://cloudflare-ipfs.com/ipfs/${ipfs.replace('ipfs://', '')}`);
+      const res = await fetch(`https://tonsource.infura-ipfs.io/ipfs/${ipfs.replace('ipfs://', '')}`);
       if (res.status === 404) return undefined;
       return res.json();  
     } else {

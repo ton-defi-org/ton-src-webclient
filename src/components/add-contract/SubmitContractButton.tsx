@@ -11,6 +11,8 @@ import { client } from "../../lib/client";
 import { Col } from "@nextui-org/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useState } from "react";
+import { connectAndSendTxn } from "../../lib/ton-client";
+import { Cell } from "ton";
 
 enum CaptchState {
   NOT_STARTED,
@@ -23,6 +25,7 @@ export function SubmitContractButton() {
   const contractState = useRecoilValue(contractStateRecoil);
   const [compileState, setCompileState] = useRecoilState(compileRecoil);
   const compilerDetails = useRecoilValue(compilerDetailsRecoil);
+  const buttonLabel = compileState.msgCell ? "Submit TXN" : "Compile";
   let { contractAddress } = useParams();
 
   const [captchaState, setCaptchaState] = useState(
@@ -57,8 +60,8 @@ export function SubmitContractButton() {
           captchaState === CaptchState.PENDING ||
           !filesState.hasFiles ||
           !contractState.hash.data ||
-          !contractAddress ||
-          compileState.compileResult?.result === "similar" // This implies source has been uploaded already
+          !contractAddress 
+          // compileState.compileResult?.result === "similar" // This implies source has been uploaded already
         }
         onClick={async () => {
           if (captchaState === CaptchState.NOT_STARTED) {
@@ -68,26 +71,34 @@ export function SubmitContractButton() {
 
           if (captchaState !== CaptchState.DONE) return;
 
-          try {
-            setCompileState((s) => ({ isLoading: true }));
-            const res = await client.tryCompile(
-              contractState.hash.data!,
-              filesState.uploadedFiles,
-              contractAddress!,
-              compilerDetails
-            );
+          if (!compileState.msgCell) {
+            try {
+              setCompileState((s) => ({ isLoading: true }));
+              const res = await client.tryCompile(
+                contractState.hash.data!,
+                filesState.uploadedFiles,
+                contractAddress!,
+                compilerDetails
+              );
 
-            setCompileState((s) => ({ ...s, ...res, isLoading: false }));
-          } catch (e: any) {
-            setCompileState((s) => ({
-              ...s,
-              error: e.toString(),
-              isLoading: false,
-            }));
+              console.log(res);
+
+              setCompileState((s) => ({ ...s, ...res, isLoading: false }));
+            } catch (e: any) {
+              console.log(e);
+              setCompileState((s) => ({
+                ...s,
+                error: e.toString(),
+                isLoading: false,
+              }));
+            }
+          } else {
+            // @ts-ignore fix buffer
+            await connectAndSendTxn(Cell.fromBoc(Buffer.from(compileState.msgCell!.data))[0]);
           }
         }}
       >
-        Submit
+        {buttonLabel}
       </Button>
     </Col>
   );

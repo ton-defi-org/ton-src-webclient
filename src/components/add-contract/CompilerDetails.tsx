@@ -28,6 +28,7 @@ export function CompilerDetails() {
               bordered
               animated={false}
               labelLeft="Compiler"
+              aria-label="Compiler"
               css={{ cursor: "pointer" }}
               value={compilerDetails.compiler}
             />
@@ -67,6 +68,7 @@ export function CompilerDetails() {
               bordered
               status="secondary"
               placeholder="func command"
+              aria-label="func command"
             />
           </Grid>
         </Grid.Container>
