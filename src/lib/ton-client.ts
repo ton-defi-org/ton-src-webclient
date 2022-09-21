@@ -8,22 +8,37 @@ export const toSha256Buffer = (s: string) => {
   return Buffer.from(sha.digestSync());
 };
 
-export async function connectAndSendTxn(cell: Cell) {
-  const tc = new TonConnection(
-    new TonhubProvider({
-      persistenceProvider: localStorage,
-      onSessionLinkReady: (l) => {
-        console.log(l);
-        // window.open(l);
-      },
-      onTransactionLinkReady: (l) => {
-        console.log(l, "txn");
-        window.open(l);
-      },
-    }),
-    "https://scalable-api.tonwhales.com/jsonRPC"
+const tc = new TonConnection(
+  new TonhubProvider({
+    persistenceProvider: localStorage,
+    onSessionLinkReady: (l) => {
+      console.log(l);
+      // window.open(l);
+    },
+    onTransactionLinkReady: (l) => {
+      console.log(l, "txn");
+      window.open(l);
+    },
+  }),
+  "https://scalable-api.tonwhales.com/jsonRPC"
+);
+
+export async function getSourceItemAddress(codeCellHash: string) {
+  const res = await tc._tonClient.callGetMethod(
+    Address.parse(process.env.REACT_APP_SOURCES_REGISTRY!),
+    "get_source_item_address",
+    [
+      ["num", new BN(toSha256Buffer("orbs.com")).toString()], // TODO const
+      ["num", new BN(Buffer.from(codeCellHash, "base64")).toString(10)],
+    ]
   );
 
+  return Cell.fromBoc(Buffer.from(res.stack[0][1].bytes, "base64"))[0]
+    .beginParse()
+    .readAddress()!;
+}
+
+export async function connectAndSendTxn(cell: Cell) {
   const con = await tc.connect();
 
   console.log(con);
@@ -38,36 +53,9 @@ export async function connectAndSendTxn(cell: Cell) {
 }
 
 export async function readContractDetails(codeCellHash: string): Promise<any> {
-  const tc = new TonConnection(
-    new TonhubProvider({
-      persistenceProvider: localStorage,
-      onSessionLinkReady: (l) => {
-        console.log(l);
-        // window.open(l);
-      },
-      onTransactionLinkReady: (l) => {
-        console.log(l, "txn");
-      },
-    }),
-    "https://scalable-api.tonwhales.com/jsonRPC"
-  );
+  const sourceItemAddr = await getSourceItemAddress(codeCellHash);
 
   // TODO tc number
-  const res = await tc._tonClient.callGetMethod(
-    Address.parse(process.env.REACT_APP_SOURCES_REGISTRY!),
-    "get_source_item_address",
-    [
-      ["num", new BN(toSha256Buffer("orbs.com")).toString()], // TODO const
-      ["num", new BN(Buffer.from(codeCellHash, "base64")).toString(10)],
-    ]
-  );
-
-  const sourceItemAddr = Cell.fromBoc(
-    Buffer.from(res.stack[0][1].bytes, "base64")
-  )[0]
-    .beginParse()
-    .readAddress()!;
-
   const isDeployed = await tc._tonClient.isContractDeployed(sourceItemAddr);
   console.log(isDeployed, "isDeployed");
 

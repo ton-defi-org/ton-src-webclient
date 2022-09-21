@@ -11,8 +11,12 @@ import { client } from "../../lib/client";
 import { Col } from "@nextui-org/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useState } from "react";
-import { connectAndSendTxn } from "../../lib/ton-client";
+import { connectAndSendTxn, readContractDetails } from "../../lib/ton-client";
 import { Cell } from "ton";
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 enum CaptchState {
   NOT_STARTED,
@@ -22,10 +26,9 @@ enum CaptchState {
 
 export function SubmitContractButton() {
   const filesState = useRecoilValue(fileRecoil);
-  const contractState = useRecoilValue(contractStateRecoil);
+  const [contractState, setContractState] = useRecoilState(contractStateRecoil);
   const [compileState, setCompileState] = useRecoilState(compileRecoil);
   const compilerDetails = useRecoilValue(compilerDetailsRecoil);
-  const buttonLabel = compileState.msgCell ? "Submit TXN" : "Compile";
   let { contractAddress } = useParams();
 
   const [captchaState, setCaptchaState] = useState(
@@ -54,24 +57,25 @@ export function SubmitContractButton() {
             size={"normal"}
           />
         )}
-      <Button
-        css={{ ml: 16 }}
-        disabled={
-          captchaState === CaptchState.PENDING ||
-          !filesState.hasFiles ||
-          !contractState.hash.data ||
-          !contractAddress 
-          // compileState.compileResult?.result === "similar" // This implies source has been uploaded already
-        }
-        onClick={async () => {
-          if (captchaState === CaptchState.NOT_STARTED) {
-            setCaptchaState(CaptchState.PENDING);
-            return;
+      <Button.Group>
+        <Button
+          css={{ ml: 16 }}
+          disabled={
+            captchaState === CaptchState.PENDING ||
+            !filesState.hasFiles ||
+            !contractState.hash.data ||
+            !contractAddress ||
+            !!compileState.msgCell
+            // compileState.compileResult?.result === "similar" // This implies source has been uploaded already
           }
+          onClick={async () => {
+            if (captchaState === CaptchState.NOT_STARTED) {
+              setCaptchaState(CaptchState.PENDING);
+              return;
+            }
 
-          if (captchaState !== CaptchState.DONE) return;
+            if (captchaState !== CaptchState.DONE) return;
 
-          if (!compileState.msgCell) {
             try {
               setCompileState((s) => ({ isLoading: true }));
               const res = await client.tryCompile(
@@ -92,14 +96,47 @@ export function SubmitContractButton() {
                 isLoading: false,
               }));
             }
-          } else {
-            // @ts-ignore fix buffer
-            await connectAndSendTxn(Cell.fromBoc(Buffer.from(compileState.msgCell!.data))[0]);
+          }}
+        >
+          Step 1: Compile
+        </Button>
+        <Button
+          disabled={
+            !compileState.msgCell || contractState.isSourceItemContractDeployed
           }
-        }}
-      >
-        {buttonLabel}
-      </Button>
+          onClick={async () => {
+            await connectAndSendTxn(
+              // @ts-ignore fix buffer
+              Cell.fromBoc(Buffer.from(compileState.msgCell!.data))[0]
+            );
+
+            for (let i = 0; i < 20; i++) {
+              const isDeployed = !!(await readContractDetails(
+                contractState.hash.data!
+              ));
+              if (isDeployed) {
+                setContractState((s) => ({
+                  ...s,
+                  isSourceItemContractDeployed: true,
+                }));
+                break;
+              }
+              await sleep(3000);
+            }
+          }}
+        >
+          Step 2: Submit TXN
+        </Button>
+        <Button
+          color="success"
+          disabled={!contractState.isSourceItemContractDeployed}
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          Step 3: View Verified Contract
+        </Button>
+      </Button.Group>
     </Col>
   );
 }

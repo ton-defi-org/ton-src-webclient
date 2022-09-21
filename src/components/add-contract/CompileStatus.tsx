@@ -38,21 +38,6 @@ export function CompileStatus() {
       {compileState.compileResult?.hash && (
         <DataPiece label="Hash" data={compileState.compileResult?.hash + " " + matchIcon} />
       )}
-      {compileState.compileResult?.result === "similar" && (
-        <Col>
-          <Row align="baseline">
-            <Button
-              css={{ mt: 8 }}
-              color="success"
-              onClick={() => {
-                window.location.reload();
-              }}
-            >
-              View contract
-            </Button>
-          </Row>
-        </Col>
-      )}
       {compileState.compileResult?.result === "not_similar" && (
         <Text color="error">Hashes do not match</Text>
       )}

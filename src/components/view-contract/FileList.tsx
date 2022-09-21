@@ -10,6 +10,7 @@ export function FileList() {
   const rows = contractState.source.data?.sources.map((f) => {
     return (
       <Col
+        key={f.originalFilename}
         onClick={() => {
           if (selectedFile.selected !== f.originalFilename) {
             // @ts-ignore

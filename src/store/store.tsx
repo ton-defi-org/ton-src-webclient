@@ -10,6 +10,40 @@ const fileTypes = ["fc"];
 
 */
 
+export function useRecoilStateMerger<T>(
+  recoil: RecoilState<T>
+): [T, (updated: Partial<T>) => void] {
+  const [data, setData] = useRecoilState(recoil);
+
+  const setProp = (obj: any) => {
+    setData((s) => ({ ...s, ...obj }));
+  };
+
+  return [data, setProp];
+}
+
+export function generateRecoil<T, C>(
+  defaultVal: T,
+  selectorObjFunc: (currentVal: T) => C
+) {
+  const _atom = atom<T>({
+    key: `${Math.random()}`,
+    default: defaultVal,
+  });
+  const _selector = selector({
+    key: `${Math.random()}`,
+    get: ({ get }) => {
+      const _state = get(_atom);
+      return { ..._state, ...selectorObjFunc(_state) };
+    },
+    set: ({ set, get }, newVal) => {
+      set(_atom, newVal);
+    },
+  });
+
+  return _selector;
+}
+
 export type UploadedFile = {
   file: File;
   isEntrypoint: boolean;
@@ -64,40 +98,6 @@ export const compilerDetailsRecoil = generateRecoil(
   () => ({})
 );
 
-export function useRecoilStateMerger<T>(
-  recoil: RecoilState<T>
-): [T, (updated: Partial<T>) => void] {
-  const [data, setData] = useRecoilState(recoil);
-
-  const setProp = (obj: any) => {
-    setData((s) => ({ ...s, ...obj }));
-  };
-
-  return [data, setProp];
-}
-
-export function generateRecoil<T, C>(
-  defaultVal: T,
-  selectorObjFunc: (currentVal: T) => C
-) {
-  const _atom = atom<T>({
-    key: `${Math.random()}`,
-    default: defaultVal,
-  });
-  const _selector = selector({
-    key: `${Math.random()}`,
-    get: ({ get }) => {
-      const _state = get(_atom);
-      return { ..._state, ...selectorObjFunc(_state) };
-    },
-    set: ({ set, get }, newVal) => {
-      set(_atom, newVal);
-    },
-  });
-
-  return _selector;
-}
-
 export const contractStateRecoil = generateRecoil<
   {
     hash: FetchablePiece<string>;
@@ -105,6 +105,16 @@ export const contractStateRecoil = generateRecoil<
     source: FetchablePiece<ReturnedSource | null>;
     workchain?: string;
     decompiled: FetchablePiece<string>;
+    isSourceItemContractDeployed: boolean;
   },
   {}
->({ hash: {}, source: {}, balance: {}, decompiled: {} }, (s) => ({}));
+>(
+  {
+    hash: {},
+    source: {},
+    balance: {},
+    decompiled: {},
+    isSourceItemContractDeployed: false,
+  },
+  (s) => ({})
+);
