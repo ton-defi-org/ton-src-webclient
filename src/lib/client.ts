@@ -63,6 +63,7 @@ class Client {
   }
 
   async get(hash: string): Promise<ReturnedSource | undefined> {
+    return undefined; // TODO remove
     const ipfs = await readContractDetails(hash);
 
     if (ipfs) {

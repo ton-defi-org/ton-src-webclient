@@ -9,17 +9,7 @@ export const toSha256Buffer = (s: string) => {
 };
 
 const tc = new TonConnection(
-  new TonhubProvider({
-    persistenceProvider: localStorage,
-    onSessionLinkReady: (l) => {
-      console.log(l);
-      // window.open(l);
-    },
-    onTransactionLinkReady: (l) => {
-      console.log(l, "txn");
-      window.open(l);
-    },
-  }),
+  null,
   "https://scalable-api.tonwhales.com/jsonRPC"
 );
 
@@ -38,18 +28,12 @@ export async function getSourceItemAddress(codeCellHash: string) {
     .readAddress()!;
 }
 
-export async function connectAndSendTxn(cell: Cell) {
-  const con = await tc.connect();
-
-  console.log(con);
-
-  const txn = await tc.requestTransaction({
+export async function connectAndSendTxn(tonConnect: TonConnection, cell: Cell) {
+  await tonConnect.requestTransaction({
     to: Address.parse(process.env.REACT_APP_VERIFIER_REGISTRY!),
     value: toNano(0.05),
     message: cell,
   });
-
-  console.log(txn);
 }
 
 export async function readContractDetails(codeCellHash: string): Promise<any> {

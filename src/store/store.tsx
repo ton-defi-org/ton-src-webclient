@@ -118,3 +118,8 @@ export const contractStateRecoil = generateRecoil<
   },
   (s) => ({})
 );
+
+export const walletConnectionRecoil = generateRecoil<
+  { address: string | undefined },
+  {}
+>({ address: undefined }, (s) => ({}));

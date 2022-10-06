@@ -13,6 +13,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useState } from "react";
 import { connectAndSendTxn, readContractDetails } from "../../lib/ton-client";
 import { Cell } from "ton";
+import { useTonConnection } from "../../WalletConnection";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -30,6 +31,7 @@ export function SubmitContractButton() {
   const [compileState, setCompileState] = useRecoilState(compileRecoil);
   const compilerDetails = useRecoilValue(compilerDetailsRecoil);
   let { contractAddress } = useParams();
+  const { getConnection, walletAddress } = useTonConnection();
 
   const [captchaState, setCaptchaState] = useState(
     process.env.NODE_ENV === "production"
@@ -102,10 +104,15 @@ export function SubmitContractButton() {
         </Button>
         <Button
           disabled={
-            !compileState.msgCell || contractState.isSourceItemContractDeployed
+            !compileState.msgCell ||
+            contractState.isSourceItemContractDeployed ||
+            !walletAddress
           }
           onClick={async () => {
+            if (!walletAddress) return;
+
             await connectAndSendTxn(
+              getConnection(),
               // @ts-ignore fix buffer
               Cell.fromBoc(Buffer.from(compileState.msgCell!.data))[0]
             );

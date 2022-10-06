@@ -2,8 +2,10 @@ import { Address, TonClient, Cell, fromNano } from "ton";
 import { fromCode } from "tvm-disassembler";
 import { Cell as DisassmeblerCell } from "tvm-disassembler/node_modules/ton";
 
+export const RPC_API = "https://scalable-api.tonwhales.com/jsonRPC";
+
 const client = new TonClient({
-  endpoint: "https://scalable-api.tonwhales.com/jsonRPC",
+  endpoint: RPC_API,
 });
 
 export function workchainForAddress(address: string): string {

@@ -12,7 +12,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useResetRecoilState, useRecoilValue } from "recoil";
 import { AddContract } from "./components/add-contract/AddContract";
-import { compilerDetailsRecoil, contractStateRecoil } from "./store/store";
+import {
+  compilerDetailsRecoil,
+  contractStateRecoil,
+} from "./store/store";
 import { compileRecoil, fileRecoil } from "./store/store";
 import { generateRecoil } from "./store/store";
 import { ReturnedSource } from "./server-types/server-types";
@@ -28,6 +31,7 @@ import { useLoadContractDetails } from "./store/useLoadContractDetails";
 import { createTheme } from "@nextui-org/react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { WalletConnection } from "./WalletConnection";
 
 const darkTheme = createTheme({
   type: "dark",
@@ -112,6 +116,7 @@ function TopBar() {
               TonSource
             </Text>
             <ContractAddressInput />
+            <WalletConnection />
           </Row>
         </Card.Body>
       </Card>
