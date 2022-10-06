@@ -24,7 +24,7 @@ export function AddFilesButton() {
           auto
           color={"secondary"}
         >
-          Add source files
+          + Add
         </Button>
       </div>
       <input

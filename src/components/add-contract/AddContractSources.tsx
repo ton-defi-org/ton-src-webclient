@@ -21,44 +21,33 @@ export function AddContractSources() {
   });
 
   return (
-    <BaseCard
-      css={{
-        border: isDragActive ? "3px dashed $accents2" : "",
-      }}
+    <div
+      {...getRootProps()}
+      style={{ display: "flex", flexDirection: "column" }}
     >
-      <div
-        {...getRootProps()}
-        style={{ display: "flex", flexDirection: "column" }}
-      >
-        <Grid.Container css={{ mb: 8 }}>
-          <Grid>
-            <Text css={{ mb: 12 }} h4>
-              Add sources
-            </Text>
-          </Grid>
-          <Grid css={{ ml: "auto" }}>
-            <AddFilesButton />
-          </Grid>
-        </Grid.Container>
-        {!fileState.hasFiles && (
-          <Text
-            css={{
-              ta: "center",
-              py: 30,
-              my: 30,
-              bgColor: "#00000007",
-              color: "$accents6",
-              br: 12,
-            }}
-          >
-            Drop ".fc" files here
-          </Text>
-        )}
-        {fileState.hasFiles && <UploadFilesTable />}
-        {fileState.hasFiles && <FileUploadWarnings />}
-        <CompilerDetails />
-        <SubmitContractButton />
-      </div>
-    </BaseCard>
+      <Grid.Container css={{ mb: 8 }}>
+        <Grid css={{ ml: "auto" }}>
+          <AddFilesButton />
+        </Grid>
+      </Grid.Container>
+      {!fileState.hasFiles && (
+        <Text
+          css={{
+            ta: "center",
+            py: 30,
+            my: 30,
+            bgColor: "#00000007",
+            color: "$accents6",
+            br: 12,
+          }}
+        >
+          Drop ".fc" files here
+        </Text>
+      )}
+      {fileState.hasFiles && <UploadFilesTable />}
+      {fileState.hasFiles && <FileUploadWarnings />}
+      <CompilerDetails />
+      <SubmitContractButton />
+    </div>
   );
 }
