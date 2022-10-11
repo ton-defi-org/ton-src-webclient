@@ -127,8 +127,8 @@ function ViewContractVerification() {
               {
                 address: contractAddress,
                 files: c.source.data!.sources.map((s) => [
-                  s.codeLocationPointer,
-                  s.originalFilename,
+                  s.url,
+                  s.filename,
                 ]),
                 compilationCommandLine: c.source.data!.compileCommandLine,
               },

@@ -18,8 +18,8 @@ export function CodeViewer() {
     }
     fetch(
       contractState.source.data?.sources.find(
-        (f) => f.originalFilename === selectedFile.selected
-      )?.codeLocationPointer?.replace("", "https://tonsource.infura-ipfs.io/ipfs/") ?? ""
+        (f) => f.filename === selectedFile.selected
+      )?.url?.replace("ipfs://", "https://tonsource.infura-ipfs.io/ipfs/") ?? ""
     )
       .then((f) => f.text())
       .then(setContent);

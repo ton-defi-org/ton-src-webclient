@@ -84,7 +84,8 @@ export function SubmitContractButton() {
                 contractState.hash.data!,
                 filesState.uploadedFiles,
                 contractAddress!,
-                compilerDetails
+                compilerDetails,
+                walletAddress!
               );
 
               console.log(res);

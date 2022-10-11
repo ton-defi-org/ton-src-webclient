@@ -10,16 +10,16 @@ export function FileList() {
   const rows = contractState.source.data?.sources.map((f) => {
     return (
       <Col
-        key={f.originalFilename}
+        key={f.filename}
         onClick={() => {
-          if (selectedFile.selected !== f.originalFilename) {
+          if (selectedFile.selected !== f.filename) {
             // @ts-ignore
-            setSelectedFile({ selected: f.originalFilename });
+            setSelectedFile({ selected: f.filename });
           }
         }}
         css={{
           bgColor:
-            f.originalFilename === selectedFile.selected ? "$blue400" : "white",
+            f.filename === selectedFile.selected ? "$blue400" : "white",
           textAlign: "left",
           cursor: "pointer",
           py: 8,
@@ -27,7 +27,7 @@ export function FileList() {
           borderRadius: 4,
           "&:hover": {
             bgColor:
-              f.originalFilename === selectedFile.selected
+              f.filename === selectedFile.selected
                 ? "$blue400"
                 : "$blue200",
           },
@@ -38,9 +38,9 @@ export function FileList() {
             textAlign: "left",
             cursor: "pointer",
           }}
-          key={f.originalFilename}
+          key={f.filename}
         >
-          {f.originalFilename}
+          {f.filename}
         </Text>
       </Col>
     );

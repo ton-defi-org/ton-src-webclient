@@ -14,9 +14,9 @@ export function FileViewer() {
   const contractState = useRecoilValue(contractStateRecoil);
 
   useEffect(() => {
-    if (contractState.source.data?.sources?.[0]?.originalFilename) {
+    if (contractState.source.data?.sources?.[0]?.filename) {
       setSelectedFile({
-        selected: contractState.source.data?.sources?.[0]?.originalFilename,
+        selected: contractState.source.data?.sources?.[0]?.filename,
       });
     }
   }, [contractState.source.data?.sources, setSelectedFile]);

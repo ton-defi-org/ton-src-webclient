@@ -23,7 +23,8 @@ class Client {
     hash: string,
     uploadedFiles: UploadedFile[],
     contractAddress: string,
-    compileOptions: CompileOptions
+    compileOptions: CompileOptions,
+    senderAddress: string
   ): Promise<Partial<VerifyResult>> {
     const formData = new FormData();
 
@@ -45,6 +46,7 @@ class Client {
           isStdLib: u.isStdlib,
           hasIncludeDirectives: u.hasIncludeDirectives,
         })),
+        senderAddress
       })
     );
 

@@ -21,8 +21,8 @@ export type CompileOptions = {
 
 export type DBSource = CompileOptions & {
   sources: {
-    codeLocationPointer: CodeLocationPointer;
-    originalFilename: string;
+    url: URL;
+    filename: string;
     includeInCompile: boolean;
     isEntrypoint: boolean;
     isStdLib: boolean;
@@ -35,9 +35,8 @@ export type DBSource = CompileOptions & {
 
 export type ReturnedSource = CompileOptions & {
   sources: {
-    // url: URL; TODO
-    codeLocationPointer: CodeLocationPointer
-    originalFilename: string;
+    url: URL;
+    filename: string;
     includeInCompile: boolean;
     isEntrypoint: boolean;
     isStdLib: boolean;

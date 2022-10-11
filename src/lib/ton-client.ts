@@ -18,7 +18,7 @@ export async function getSourceItemAddress(codeCellHash: string) {
     Address.parse(process.env.REACT_APP_SOURCES_REGISTRY!),
     "get_source_item_address",
     [
-      ["num", new BN(toSha256Buffer("orbs.com")).toString()], // TODO const
+      ["num", new BN(toSha256Buffer("orbs3.com")).toString()], // TODO const
       ["num", new BN(Buffer.from(codeCellHash, "base64")).toString(10)],
     ]
   );
